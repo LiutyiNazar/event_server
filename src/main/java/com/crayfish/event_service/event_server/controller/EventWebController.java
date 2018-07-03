@@ -67,7 +67,7 @@ public class EventWebController {
         logger.info("Command has been successfully executed");
         return entities;
     }
-
+    //Check for usability!!
     @GetMapping("/context")
     public @ResponseBody
     ContextEntity[] getContext() {

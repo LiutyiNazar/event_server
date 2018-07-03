@@ -65,6 +65,7 @@ public class SessionService implements SessionServiceInterface {
             }
             case "speakers": {
                 logger.info("Trying to execute adding speaker to session");
+
                 SpeakersEntity speakersEntity = speakerService.getById(Integer.parseInt(value));
                 List<SpeakersEntity> speakersEntityList = new ArrayList<>();
                 speakersEntityList.add(speakersEntity);
@@ -72,6 +73,7 @@ public class SessionService implements SessionServiceInterface {
                 List<SessionsEntity> sessionsEntities = speakersEntity.getSessions();
                 sessionsEntities.add(entity);
                 speakersEntity.setSessions(sessionsEntities);
+
                 sessionRepository.save(entity);
                 speakerService.save(speakersEntity);
                 break;
