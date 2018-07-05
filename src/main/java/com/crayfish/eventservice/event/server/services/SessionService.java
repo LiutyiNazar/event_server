@@ -1,9 +1,9 @@
-package com.crayfish.event_service.event_server.services;
+package com.crayfish.eventservice.event.server.services;
 
-import com.crayfish.event_service.event_server.entities.SessionsEntity;
-import com.crayfish.event_service.event_server.entities.SpeakersEntity;
-import com.crayfish.event_service.event_server.intefaces.SessionServiceInterface;
-import com.crayfish.event_service.event_server.repositories.SessionRepository;
+import com.crayfish.eventservice.event.server.entities.SessionsEntity;
+import com.crayfish.eventservice.event.server.entities.SpeakersEntity;
+import com.crayfish.eventservice.event.server.intefaces.SessionServiceInterface;
+import com.crayfish.eventservice.event.server.repositories.SessionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,30 +23,34 @@ public class SessionService implements SessionServiceInterface {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Override
     public List<SessionsEntity> getAll() {
         return sessionRepository.findAll();
     }
 
+    @Override
     public SessionsEntity getById(int id) {
         return sessionRepository.getOne(id);
     }
 
+    @Override
     public List<SessionsEntity> getSessionsBySpeakerId(int id) {
         logger.info("Getting session by speaker id");
         return sessionRepository.findTop10BySpeakers_id(id);
     }
 
+    @Override
     public void updateSessionOrCreateNew(Integer id, String updatingType, String value) {
         logger.info("Updating session");
         SessionsEntity entity;
-        if (sessionRepository.count() != id) {
+        if (getLastIdNumber() != id) {
             logger.info("Creating new session. because requested don`t exist");
             entity = new SessionsEntity();
         } else {
             entity = getById(id);
         }
 
-        entity.setId(id);
+        //entity.setId(id);
         switch (updatingType) {
             case "id": {
                 break;
@@ -84,6 +88,7 @@ public class SessionService implements SessionServiceInterface {
         sessionRepository.saveAndFlush(entity);
     }
 
+    @Override
     public Integer getLastIdNumber() {
         Integer count = 0;
         for (SessionsEntity sessionsEntity : getAll()) {
@@ -92,6 +97,7 @@ public class SessionService implements SessionServiceInterface {
         return count;
     }
 
+    @Override
     public void save(SessionsEntity sessionsEntity) {
         sessionRepository.save(sessionsEntity);
     }
